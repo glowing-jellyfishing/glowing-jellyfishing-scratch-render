@@ -2076,7 +2076,7 @@ class RenderWebGL extends EventEmitter {
             const drawable = this._allDrawables[drawableID];
 
             const uniforms = {};
-            if (drawMode === 'default' && drawable.skin) {
+            if (drawMode === ShaderManager.DRAW_MODE.default && drawable.skin) {
                 // If rotationCenterDirty or skinScaleDirty is dirty, then set _calculateTransform first
                 // because _rotationAdjusted and _skinScale  needs to call _calculateTransform before using
                 let uniformHasBeenSet = false
