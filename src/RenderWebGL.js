@@ -2085,7 +2085,7 @@ class RenderWebGL extends EventEmitter {
                     uniformHasBeenSet = true;
                 }
 
-                if (drawable.inViewport(halfNativeSizeX, halfNativeSizeY)) continue;
+                if (!drawable.inViewport(halfNativeSizeX, halfNativeSizeY)) continue;
                 if (!uniformHasBeenSet) {
                     // If unconfirm was not set before
                     Object.assign(uniforms, drawable.getUniforms());
