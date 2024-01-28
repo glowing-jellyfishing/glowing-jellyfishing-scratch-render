@@ -2058,8 +2058,8 @@ class RenderWebGL extends EventEmitter {
         const gl = this._gl;
         let currentShader = null;
 
-        const halfNativeSizeX = this._nativeSize[0] / 2
-        const halfNativeSizeY = this._nativeSize[1] / 2
+        const halfNativeSizeX = this._nativeSize[0] / 2;
+        const halfNativeSizeY = this._nativeSize[1] / 2;
 
         const framebufferSpaceScaleDiffers = (
             'framebufferWidth' in opts && 'framebufferHeight' in opts &&
@@ -2093,7 +2093,8 @@ class RenderWebGL extends EventEmitter {
                 const halfSizeX = ~~((drawable._skinScale[0] / 2) + 0.5);
                 const halfSizeY = ~~((drawable._skinScale[1] / 2) + 0.5);
 
-                // The leftTop and rightBottomX of the sprite must be enlarged, otherwise there will be problems when rotating
+                // The leftTop and rightBottomX of the sprite must be enlarged,
+                // otherwise there will be problems when rotating
                 const maxHalfSize = Math.max(halfSizeX, halfSizeY);
 
                 const leftTopX = positionX - halfSizeX - maxHalfSize;
