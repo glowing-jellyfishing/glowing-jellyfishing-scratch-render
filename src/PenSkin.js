@@ -113,6 +113,7 @@ class PenSkin extends Skin {
                     instancedArraysExtension
                 );
             } else {
+                // Inefficient but still supported
                 this.instancedRendering = false;
             }
         }
@@ -390,13 +391,13 @@ class PenSkin extends Skin {
             this.attribute_index++;
             this.attribute_data[this.attribute_index] = penColor[3];
             this.attribute_index++;
-    
+
             this.attribute_data[this.attribute_index] = lineThickness;
             this.attribute_index++;
-    
+
             this.attribute_data[this.attribute_index] = lineLength;
             this.attribute_index++;
-    
+
             this.attribute_data[this.attribute_index] = x0;
             this.attribute_index++;
             this.attribute_data[this.attribute_index] = -y0;
@@ -440,13 +441,13 @@ class PenSkin extends Skin {
             this.glVertexAttribDivisor(this.a_lineColor_loc, 1);
             this.glVertexAttribDivisor(this.a_lineThicknessAndLength_loc, 1);
             this.glVertexAttribDivisor(this.a_penPoints_loc, 1);
-    
+
             this.glDrawArraysInstanced(
                 gl.TRIANGLES,
                 0, 6,
                 this.attribute_index / PEN_ATTRIBUTE_STRIDE
             );
-    
+
             this.glVertexAttribDivisor(this.a_lineColor_loc, 0);
             this.glVertexAttribDivisor(this.a_lineThicknessAndLength_loc, 0);
             this.glVertexAttribDivisor(this.a_penPoints_loc, 0);
