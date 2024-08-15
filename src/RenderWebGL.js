@@ -148,7 +148,7 @@ class RenderWebGL extends EventEmitter {
             antialias: false,
             powerPreference: RenderWebGL.powerPreference
         };
-        return twgl.getContext(canvas, contextAttribs);
+        return canvas.getContext('webgl', contextAttribs);
     }
 
     /**

@@ -97,6 +97,7 @@ class PenSkin extends Skin {
         this.a_penPoints_loc = gl.getAttribLocation(this._lineShader.program, 'a_penPoints');
 
         if (gl.drawArraysInstanced) {
+            throw new Error('bad');
             // WebGL2 has native instanced rendering
             this.instancedRendering = true;
             this.glDrawArraysInstanced = gl.drawArraysInstanced.bind(gl);
@@ -104,7 +105,7 @@ class PenSkin extends Skin {
         } else {
             // WebGL1 may have instanced rendering through the ANGLE_instanced_arrays extension
             const instancedArraysExtension = gl.getExtension('ANGLE_instanced_arrays');
-            if (instancedArraysExtension) {
+            if (false && instancedArraysExtension) {
                 this.instancedRendering = true;
                 this.glDrawArraysInstanced = instancedArraysExtension.drawElementsInstancedANGLE.bind(
                     instancedArraysExtension
