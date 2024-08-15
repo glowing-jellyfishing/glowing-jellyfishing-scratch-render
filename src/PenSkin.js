@@ -102,6 +102,7 @@ class PenSkin extends Skin {
             this.glDrawArraysInstanced = gl.drawArraysInstanced.bind(gl);
             this.glVertexAttribDivisor = gl.vertexAttribDivisor.bind(gl);
         } else {
+            throw new Error('bad');
             // WebGL1 may have instanced rendering through the ANGLE_instanced_arrays extension
             const instancedArraysExtension = gl.getExtension('ANGLE_instanced_arrays');
             if (instancedArraysExtension) {
