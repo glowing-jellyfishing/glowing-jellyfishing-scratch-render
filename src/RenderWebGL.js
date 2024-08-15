@@ -138,6 +138,8 @@ class RenderWebGL extends EventEmitter {
     constructor (canvas, xLeft, xRight, yBottom, yTop) {
         super();
 
+        this.overlayContainer = document.createElement('div');
+
         /** @type {WebGLRenderingContext} */
         const gl = this._gl = RenderWebGL._getContext(canvas);
         if (!gl) {
