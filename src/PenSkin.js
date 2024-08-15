@@ -107,7 +107,7 @@ class PenSkin extends Skin {
             const instancedArraysExtension = gl.getExtension('ANGLE_instanced_arrays');
             if (instancedArraysExtension) {
                 this.instancedRendering = true;
-                this.glDrawArraysInstanced = instancedArraysExtension.drawElementsInstancedANGLE.bind(
+                this.glDrawArraysInstanced = instancedArraysExtension.drawArraysInstancedANGLE.bind(
                     instancedArraysExtension
                 );
                 this.glVertexAttribDivisor = instancedArraysExtension.vertexAttribDivisorANGLE.bind(
