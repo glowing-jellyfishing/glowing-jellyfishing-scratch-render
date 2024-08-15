@@ -97,6 +97,7 @@ class PenSkin extends Skin {
         this.a_penPoints_loc = gl.getAttribLocation(this._lineShader.program, 'a_penPoints');
 
         if (gl.drawArraysInstanced) {
+            throw new Error('bad');
             // WebGL2 has native instanced rendering
             this.instancedRendering = true;
             this.glDrawArraysInstanced = gl.drawArraysInstanced.bind(gl);
@@ -113,6 +114,7 @@ class PenSkin extends Skin {
                     instancedArraysExtension
                 );
             } else {
+                throw new Error('bad');
                 // Inefficient but still supported
                 this.instancedRendering = false;
             }
