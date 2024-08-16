@@ -90,11 +90,15 @@ class PenSkin extends Skin {
         this.a_position_glbuffer = gl.createBuffer();
         this.a_position_loc = gl.getAttribLocation(this._lineShader.program, 'a_position');
 
-        this.attribute_glbuffer = gl.createBuffer();
-        this.attribute_index = 0;
         this.a_lineColor_loc = gl.getAttribLocation(this._lineShader.program, 'a_lineColor');
         this.a_lineThicknessAndLength_loc = gl.getAttribLocation(this._lineShader.program, 'a_lineThicknessAndLength');
         this.a_penPoints_loc = gl.getAttribLocation(this._lineShader.program, 'a_penPoints');
+
+        this.attribute_glbuffer = gl.createBuffer();
+        this.attribute_index = 0;
+        this.attribute_data = new Float32Array(PEN_ATTRIBUTE_BUFFER_SIZE);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.attribute_glbuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.attribute_data.length * 4, gl.STREAM_DRAW);
 
         if (gl.drawArraysInstanced) {
             throw new Error('bad');
@@ -126,14 +130,8 @@ class PenSkin extends Skin {
                 1, 0,
                 0, 0,
                 1, 1,
-                1, 1,
-                0, 0,
                 0, 1
             ]), gl.STATIC_DRAW);
-
-            this.attribute_data = new Float32Array(PEN_ATTRIBUTE_BUFFER_SIZE);
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.attribute_glbuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, this.attribute_data.length * 4, gl.STREAM_DRAW);
         } else {
             const positionBuffer = new Float32Array(PEN_ATTRIBUTE_BUFFER_SIZE / PEN_ATTRIBUTE_STRIDE * 2);
             for (let i = 0; i < positionBuffer.length; i += 12) {
@@ -152,10 +150,6 @@ class PenSkin extends Skin {
             }
             gl.bindBuffer(gl.ARRAY_BUFFER, this.a_position_glbuffer);
             gl.bufferData(gl.ARRAY_BUFFER, positionBuffer, gl.STATIC_DRAW);
-
-            this.attribute_data = new Float32Array(PEN_ATTRIBUTE_BUFFER_SIZE);
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.attribute_glbuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, this.attribute_data.length * 4, gl.STREAM_DRAW);
         }
 
         this.onNativeSizeChanged = this.onNativeSizeChanged.bind(this);
@@ -445,8 +439,8 @@ class PenSkin extends Skin {
             this.glVertexAttribDivisor(this.a_penPoints_loc, 1);
 
             this.glDrawArraysInstanced(
-                gl.TRIANGLES,
-                0, 6,
+                gl.TRIANGLE_STRIP,
+                0, 4,
                 this.attribute_index / PEN_ATTRIBUTE_STRIDE
             );
 
