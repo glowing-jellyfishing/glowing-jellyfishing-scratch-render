@@ -2058,6 +2058,9 @@ class RenderWebGL extends EventEmitter {
         const gl = this._gl;
         let currentShader = null;
 
+        const halfNativeSizeX = this._nativeSize[0] / 2;
+        const halfNativeSizeY = this._nativeSize[1] / 2;
+
         const framebufferSpaceScaleDiffers = (
             'framebufferWidth' in opts && 'framebufferHeight' in opts &&
             opts.framebufferWidth !== this._nativeSize[0] && opts.framebufferHeight !== this._nativeSize[1]
@@ -2071,7 +2074,25 @@ class RenderWebGL extends EventEmitter {
             if (opts.filter && !opts.filter(drawableID)) continue;
 
             const drawable = this._allDrawables[drawableID];
-            /** @todo check if drawable is inside the viewport before anything else */
+
+            const uniforms = {};
+            if (drawMode === ShaderManager.DRAW_MODE.default && drawable.skin) {
+                // If rotationCenterDirty or skinScaleDirty is dirty, then set _calculateTransform first
+                // because _rotationAdjusted and _skinScale  needs to call _calculateTransform before using
+                let uniformHasBeenSet = false;
+                if (drawable.transformBeforeCheckViewport()) {
+                    Object.assign(uniforms, drawable.getUniforms());
+                    uniformHasBeenSet = true;
+                }
+
+                if (!drawable.inViewport(halfNativeSizeX, halfNativeSizeY)) continue;
+                if (!uniformHasBeenSet) {
+                    // If unconfirm was not set before
+                    Object.assign(uniforms, drawable.getUniforms());
+                }
+            } else {
+                Object.assign(uniforms, drawable.getUniforms());
+            }
 
             // Hidden drawables (e.g., by a "hide" block) are not drawn unless
             // the ignoreVisibility flag is used (e.g. for stamping or touchingColor).
@@ -2091,7 +2112,6 @@ class RenderWebGL extends EventEmitter {
             // Skip private skins, if requested.
             if (opts.skipPrivateSkins && drawable.skin.private) continue;
 
-            const uniforms = {};
 
             let effectBits = drawable.enabledEffects;
             effectBits &= Object.prototype.hasOwnProperty.call(opts, 'effectMask') ? opts.effectMask : effectBits;
@@ -2112,8 +2132,7 @@ class RenderWebGL extends EventEmitter {
             }
 
             Object.assign(uniforms,
-                drawable.skin.getUniforms(drawableScale),
-                drawable.getUniforms());
+                drawable.skin.getUniforms(drawableScale));
 
             // Apply extra uniforms after the Drawable's, to allow overwriting.
             if (opts.extraUniforms) {
